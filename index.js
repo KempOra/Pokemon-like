@@ -6,9 +6,12 @@ const c = canvas.getContext('2d')
 canvas.width = 1024
 canvas.height = 576
 
-//gives canvas a fill colour and internal size for fill
-c.fillStyle = 'white'
-c.fillRect(0, 0, canvas.width, canvas.height)
+//building an array scan loop to build collision zone
+const collisionsMap = []
+for (let i = 0; i < collisions.length; i += 70) {// 70 is the length of tiles used in map
+collisionsMap.pish(collisions.slice(i, 70 + i))
+}
+
 
 //creates containers for map and player
 const image = new Image()
