@@ -58,17 +58,45 @@ const playerImg = new Image()
 playerImg.src = './img/char/playerDown.png'
 
 class Sprite { //creates class for sprite
-    constructor({ position, velocity, image }) {
+    constructor({ position, velocity, image, frames = { max:1 } }) {
         this.position = position
         this.image = image
+        this.frames = frames
+        
+        this.image.onload = () => {
+        this.width = this.image.width / this.frames.max,
+        this.height = this.image.height
+        }
     }
 
     draw() {
-        c.drawImage (this.image, this.position.x, this.position.y)
+        c.drawImage (
+            this.image, 
+       
+            0,//crop position for Spritesheet
+            0,
+            this.image.width / this.frames.max,//crop size
+            this.image.height,
+            this.position.x,
+            this.position.y,
+        
+            this.image.width / this.frames.max,
+            this.image.height
+            )
     }
 }
 
 
+const player = new Sprite({
+    position: {
+        x: canvas.width / 2 - 192 / 4 / 2, //render location using full size of sprite sheet
+        y:canvas.height / 2 - 68 / 2
+    },
+    image: playerImg,
+    frames: {
+        max: 4
+    }
+})
 const background = new Sprite({position: {
     x: offset.x,
     y: offset.y
@@ -103,18 +131,13 @@ function animate() {
        // Boundary.draw()
    // })
    testBoundary.draw()
-    c.drawImage (playerImg, 
-       
-       0,//crop position for Spritesheet
-       0,
-       playerImg.width / 4,//crop size
-       playerImg.height,
-       canvas.width / 2 - playerImg.width / 4 / 2, //render location using full size of sprite sheet
-       canvas.height / 2 - playerImg.height / 2,
-       playerImg.width / 4,
-       playerImg.height
-       )
+   player.draw()
+
     
+    if (playerImg.position.x + playerImg.width >= testBoundary.position.x){
+
+    }
+
     if (keys.w.pressed && lastKey === 'w') {
         movables.forEach((movable) => {
             movable.position.y += 3
@@ -131,7 +154,7 @@ function animate() {
     }
     else if (keys.d.pressed && lastKey === 'd') {
         movables.forEach((movable) => {
-            movable.position.X -= 3
+            movable.position.x -= 3
         })
     }
     
