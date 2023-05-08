@@ -17,17 +17,32 @@ image.src = './img/gameMap.png'
 const playerImg = new Image()
 playerImg.src = './img/char/playerDown.png'
 
-//loads map and player in order, crops play sprite sheet
-image.onload = () => {
+//creating animate loop
+function animate() {
+    window.requestAnimationFrame(animate)
     c.drawImage (image, 180, -70)
-     c.drawImage (playerImg, 
-        
-        0,//crop position for Spritesheet
-        0,
-        playerImg.width / 4,//crop size
-        playerImg.height,
-        canvas.width / 2 - playerImg.width / 4 / 2, //render location using full size of sprite sheet
-        canvas.height / 2 - playerImg.height / 2,
-        playerImg.width / 4,
-        playerImg.height)
+    c.drawImage (playerImg, 
+       
+       0,//crop position for Spritesheet
+       0,
+       playerImg.width / 4,//crop size
+       playerImg.height,
+       canvas.width / 2 - playerImg.width / 4 / 2, //render location using full size of sprite sheet
+       canvas.height / 2 - playerImg.height / 2,
+       playerImg.width / 4,
+       playerImg.height)
 }
+
+//event listener for movement key presses
+window.addEventListener('keydown', (e) =>{
+switch (e.key){
+    case 'w':
+        break
+    case 'a':
+        break
+    case 's':
+        break
+    case 'd':
+        break
+}
+})
