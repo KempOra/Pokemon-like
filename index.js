@@ -9,9 +9,8 @@ canvas.height = 576
 //building an array scan loop to build collision zone
 const collisionsMap = []
 for (let i = 0; i < collisions.length; i += 70) {// 70 is the length of tiles used in map
-collisionsMap.pish(collisions.slice(i, 70 + i))
+collisionsMap.push(collisions.slice(i, 70 + i))
 }
-
 // this is the single boundary builder
 class Boundary {
     static width = 48
@@ -20,25 +19,32 @@ class Boundary {
         this.position = position
         this.width = 48 //this is the tile size(px) x4 as its zoomed 400%
         this.height = 48
-
     }
+
     draw() {
         c.fillStyle = 'red'
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 }
 
-//total boundaries creator
+
 const boundaries = []
 
+//offset for total map
+const offset = {
+    x:176,
+    y:-130
+}
+//
+//total boundaries creator
 collisionsMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
-        if (symbol = 1025)
+        if (symbol === 1025)
         boundaries.push(
             new Boundary({
                 position: {
-            x: j * Boundary.width,
-            y: i * Boundary.height
+            x: j * Boundary.width + offset.x,
+            y: i * Boundary.height + offset.y
         }}))
 
     })
@@ -61,9 +67,11 @@ class Sprite { //creates class for sprite
         c.drawImage (this.image, this.position.x, this.position.y)
     }
 }
+
+
 const background = new Sprite({position: {
-    x: 176,
-    y: -70
+    x: offset.x,
+    y: offset.y
     },
     image: image
 })
@@ -79,10 +87,20 @@ const keys= {
         pressed: false
     }
 }
+const testBoundary = new Boundary({
+    position: {
+        x:400,
+        y:400
+    }
+})
 //creating animate loop
 function animate() {
     window.requestAnimationFrame(animate)
     background.draw()
+   // boundaries.forEach(Boundary => {
+       // Boundary.draw()
+   // })
+   testBoundary.draw()
     c.drawImage (playerImg, 
        
        0,//crop position for Spritesheet
@@ -104,7 +122,7 @@ animate()
 
 
 let lastKey = ''//lets movent change when multi key press
-window.addEventListener('keydown', (e) =>{//event listener for movement key presses
+window.addEventListener('keydown', (e) =>{//event listener for movement key press down
 switch (e.key){
     case 'w':
         keys.w.pressed = true
@@ -124,7 +142,7 @@ switch (e.key){
         break
     }
 })
-window.addEventListener('keyup', (e) =>{
+window.addEventListener('keyup', (e) =>{//event listener for movement key release
     switch (e.key){
         case 'w':
             keys.w.pressed = false
