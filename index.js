@@ -79,7 +79,6 @@ class Sprite { //creates class for sprite
             this.image.height,
             this.position.x,
             this.position.y,
-        
             this.image.width / this.frames.max,
             this.image.height
             )
@@ -90,7 +89,7 @@ class Sprite { //creates class for sprite
 const player = new Sprite({
     position: {
         x: canvas.width / 2 - 192 / 4 / 2, //render location using full size of sprite sheet
-        y:canvas.height / 2 - 68 / 2
+        y: canvas.height / 2 - 68 / 2
     },
     image: playerImg,
     frames: {
@@ -134,7 +133,8 @@ function animate() {
    player.draw()
 
     
-    if (playerImg.position.x + playerImg.width >= testBoundary.position.x){
+    if (playerImg.position.x + playerImg.width >= testBoundary.position.x && 
+        player.position.x <= testBoundary.position.x + testBoundary.width){
 
     }
 
