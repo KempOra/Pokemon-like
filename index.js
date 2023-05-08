@@ -60,17 +60,17 @@ function animate() {
        playerImg.width / 4,
        playerImg.height)
     
-    if (keys.w.pressed) background.position.y +=3 
-    else if (keys.a.pressed) background.position.x +=3 
-    else if (keys.s.pressed) background.position.y -=3
-    else if (keys.d.pressed) background.position.x -=3
+    if (keys.w.pressed && lastKey === 'w') background.position.y +=3 
+    else if (keys.a.pressed && lastKey === 'a') background.position.x +=3 
+    else if (keys.s.pressed && lastKey === 's') background.position.y -=3
+    else if (keys.d.pressed && lastKey === 'd') background.position.x -=3
     
 }
 animate()
 
-//event listener for movement key presses
-let lastKey = ''
-window.addEventListener('keydown', (e) =>{
+
+let lastKey = ''//lets movent change when multi key press
+window.addEventListener('keydown', (e) =>{//event listener for movement key presses
 switch (e.key){
     case 'w':
         keys.w.pressed = true
