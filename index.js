@@ -133,7 +133,7 @@ function animate() {
    player.draw()
 
     
-    if (playerImg.position.x + playerImg.width >= testBoundary.position.x && 
+    if (player.position.x + player.width >= testBoundary.position.x && 
         player.position.x <= testBoundary.position.x + testBoundary.width){
 
     }
