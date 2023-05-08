@@ -24,16 +24,27 @@ class Sprite { //creates class for sprite
     }
 
     draw() {
-        c.drawImage (this.image, 180, -70)
+        c.drawImage (this.image, this.position.x, this.position.y)
     }
 }
 const background = new Sprite({position: {
-    x: 180,
+    x: 176,
     y: -70
     },
     image: image
 })
-
+//container to tell if key is pressed
+const keys= {
+    w: {
+        pressed: false
+    },a: {
+        pressed: false
+    },s: {
+        pressed: false
+    },d: {
+        pressed: false
+    }
+}
 //creating animate loop
 function animate() {
     window.requestAnimationFrame(animate)
@@ -48,19 +59,50 @@ function animate() {
        canvas.height / 2 - playerImg.height / 2,
        playerImg.width / 4,
        playerImg.height)
+    
+    if (keys.w.pressed) background.position.y +=3 
+    else if (keys.a.pressed) background.position.x +=3 
+    else if (keys.s.pressed) background.position.y -=3
+    else if (keys.d.pressed) background.position.x -=3
+    
 }
 animate()
 
 //event listener for movement key presses
+let lastKey = ''
 window.addEventListener('keydown', (e) =>{
 switch (e.key){
     case 'w':
+        keys.w.pressed = true
+        lastKey = 'w'
         break
     case 'a':
+        keys.a.pressed = true
+        lastKey = 'a'
         break
     case 's':
+        keys.s.pressed = true
+        lastKey = 's'
         break
     case 'd':
+        keys.d.pressed = true
+        lastKey = 'd'
         break
-}
+    }
 })
+window.addEventListener('keyup', (e) =>{
+    switch (e.key){
+        case 'w':
+            keys.w.pressed = false
+            break
+        case 'a':
+            keys.a.pressed = false
+            break
+        case 's':
+            keys.s.pressed = false
+            break
+        case 'd':
+            keys.d.pressed = false
+            break
+        }
+    })
