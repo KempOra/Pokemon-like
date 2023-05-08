@@ -93,6 +93,8 @@ const testBoundary = new Boundary({
         y:400
     }
 })
+
+const movables = [background, testBoundary]
 //creating animate loop
 function animate() {
     window.requestAnimationFrame(animate)
@@ -110,12 +112,28 @@ function animate() {
        canvas.width / 2 - playerImg.width / 4 / 2, //render location using full size of sprite sheet
        canvas.height / 2 - playerImg.height / 2,
        playerImg.width / 4,
-       playerImg.height)
+       playerImg.height
+       )
     
-    if (keys.w.pressed && lastKey === 'w') background.position.y +=3 
-    else if (keys.a.pressed && lastKey === 'a') background.position.x +=3 
-    else if (keys.s.pressed && lastKey === 's') background.position.y -=3
-    else if (keys.d.pressed && lastKey === 'd') background.position.x -=3
+    if (keys.w.pressed && lastKey === 'w') {
+        movables.forEach((movable) => {
+            movable.position.y += 3
+        })
+    } else if (keys.a.pressed && lastKey === 'a') {
+        movables.forEach((movable) => {
+            movable.position.x += 3
+         })
+    }
+    else if (keys.s.pressed && lastKey === 's') {
+        movables.forEach((movable) => {
+            movable.position.y -= 3
+        })
+    }
+    else if (keys.d.pressed && lastKey === 'd') {
+        movables.forEach((movable) => {
+            movable.position.X -= 3
+        })
+    }
     
 }
 animate()
