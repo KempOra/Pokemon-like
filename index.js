@@ -12,6 +12,37 @@ for (let i = 0; i < collisions.length; i += 70) {// 70 is the length of tiles us
 collisionsMap.pish(collisions.slice(i, 70 + i))
 }
 
+// this is the single boundary builder
+class Boundary {
+    static width = 48
+    static height = 48
+    constructor({position}) {
+        this.position = position
+        this.width = 48 //this is the tile size(px) x4 as its zoomed 400%
+        this.height = 48
+
+    }
+    draw() {
+        c.fillStyle = 'red'
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+    }
+}
+
+//total boundaries creator
+const boundaries = []
+
+collisionsMap.forEach((row, i) => {
+    row.forEach((symbol, j) => {
+        if (symbol = 1025)
+        boundaries.push(
+            new Boundary({
+                position: {
+            x: j * Boundary.width,
+            y: i * Boundary.height
+        }}))
+
+    })
+})
 
 //creates containers for map and player
 const image = new Image()
