@@ -17,10 +17,27 @@ image.src = './img/gameMap.png'
 const playerImg = new Image()
 playerImg.src = './img/char/playerDown.png'
 
+class Sprite { //creates class for sprite
+    constructor({ position, velocity, image }) {
+        this.position = position
+        this.image = image
+    }
+
+    draw() {
+        c.drawImage (this.image, 180, -70)
+    }
+}
+const background = new Sprite({position: {
+    x: 180,
+    y: -70
+    },
+    image: image
+})
+
 //creating animate loop
 function animate() {
     window.requestAnimationFrame(animate)
-    c.drawImage (image, 180, -70)
+    background.draw()
     c.drawImage (playerImg, 
        
        0,//crop position for Spritesheet
@@ -32,6 +49,7 @@ function animate() {
        playerImg.width / 4,
        playerImg.height)
 }
+animate()
 
 //event listener for movement key presses
 window.addEventListener('keydown', (e) =>{
