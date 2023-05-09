@@ -11,22 +11,6 @@ const collisionsMap = []
 for (let i = 0; i < collisions.length; i += 70) {// 70 is the length of tiles used in map
 collisionsMap.push(collisions.slice(i, 70 + i))
 }
-// this is the single boundary builder
-class Boundary {
-    static width = 48
-    static height = 48
-    constructor({position}) {
-        this.position = position
-        this.width = 48 //this is the tile size(px) x4 as its zoomed 400%
-        this.height = 48
-    }
-
-    draw() {
-        c.fillStyle = 'red'
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
-    }
-}
-
 
 const boundaries = []
 
@@ -57,34 +41,6 @@ image.src = './img/gameMap.png'
 const playerImg = new Image()
 playerImg.src = './img/char/playerDown.png'
 
-class Sprite { //creates class for sprite
-    constructor({ position, velocity, image, frames = { max:1 } }) {
-        this.position = position
-        this.image = image
-        this.frames = frames
-        
-        this.image.onload = () => {
-        this.width = this.image.width / this.frames.max,
-        this.height = this.image.height
-        console.log(this.height)
-        }
-    }
-
-    draw() {
-        c.drawImage (
-            this.image, 
-       
-            0,//crop position for Spritesheet
-            0,
-            this.image.width / this.frames.max,//crop size
-            this.image.height,
-            this.position.x,
-            this.position.y,
-            this.image.width / this.frames.max,
-            this.image.height
-            )
-    }
-}
 
 
 const player = new Sprite({
@@ -120,9 +76,9 @@ const keys= {
 const movables = [background, ...boundaries]
 
 function rectangularCollision({ rectangle1, rectangle2 }) {
-    return(rectangle1.position.x + rectangle1.width >= rectangle2.position.x && 
-        rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
-        rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&
+    return(rectangle1.position.x + rectangle1.width/2 >= rectangle2.position.x && 
+        rectangle1.position.x <= rectangle2.position.x + rectangle2.width/2 &&
+        rectangle1.position.y <= rectangle2.position.y + (rectangle2.height /3) &&
         rectangle1.position.y + rectangle1.height >= rectangle2.position.y
         )
 }
