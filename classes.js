@@ -15,7 +15,7 @@ class Boundary {
 }
 
 class Sprite { //creates class for sprite
-    constructor({ position, velocity, image, frames = { max:1 } }) {
+    constructor({ position, velocity, image, frames = { max:1 }, sprites = [] }) {
         this.position = position
         this.image = image
         this.frames = {...frames, val: 0, elapsed: 0}
@@ -26,14 +26,13 @@ class Sprite { //creates class for sprite
         console.log(this.height)
         }
         this.moving = false
+        this.sprites = sprites
     }
 
     draw() {
         c.drawImage (
             this.image, 
             this.frames.val * this.width ,//crop position for Spritesheet
-       
-            
             0,
             this.image.width / this.frames.max,//crop size
             this.image.height,
