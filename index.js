@@ -38,6 +38,9 @@ collisionsMap.forEach((row, i) => {
 const image = new Image()
 image.src = './img/gameMap.png'
 
+const forImg = new Image()
+forImg.src = './img/foregroundMap.png'
+
 const playerImg = new Image()
 playerImg.src = './img/char/playerDown.png'
 
@@ -59,6 +62,12 @@ const background = new Sprite({position: {
     },
     image: image
 })
+const foreground = new Sprite({position: {
+    x: offset.x,
+    y: offset.y
+    },
+    image: forImg
+})
 //container to tell if key is pressed
 const keys= {
     w: {
@@ -73,7 +82,7 @@ const keys= {
 }
 
 
-const movables = [background, ...boundaries]
+const movables = [background, ...boundaries, foreground]
 
 function rectangularCollision({ rectangle1, rectangle2 }) {
     return(rectangle1.position.x + rectangle1.width/2 >= rectangle2.position.x && 
@@ -86,6 +95,7 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
 function animate() {
     window.requestAnimationFrame(animate)
     background.draw()
+    
     boundaries.forEach((Boundary) => {
         Boundary.draw()
 
@@ -93,10 +103,11 @@ function animate() {
 })
 
    player.draw()
-
+foreground.draw()
    let moving = true
+   player.moving = false
     if (keys.w.pressed && lastKey === 'w') {
-
+        player.moving = true
         for (let i = 0; i < boundaries.length; i++){
             const Boundary = boundaries[i]
         if (
@@ -119,6 +130,7 @@ function animate() {
             movable.position.y += 3
         })
     } else if (keys.a.pressed && lastKey === 'a') {
+        player.moving = true
         for (let i = 0; i < boundaries.length; i++){
             const Boundary = boundaries[i]
         if (
@@ -142,6 +154,7 @@ function animate() {
          })
     }
     else if (keys.s.pressed && lastKey === 's') {
+        player.moving = true
         for (let i = 0; i < boundaries.length; i++){
             const Boundary = boundaries[i]
         if (
@@ -165,6 +178,7 @@ function animate() {
         })
     }
     else if (keys.d.pressed && lastKey === 'd') {
+        player.moving = true
         for (let i = 0; i < boundaries.length; i++){
             const Boundary = boundaries[i]
         if (
