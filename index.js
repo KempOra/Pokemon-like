@@ -66,6 +66,7 @@ class Sprite { //creates class for sprite
         this.image.onload = () => {
         this.width = this.image.width / this.frames.max,
         this.height = this.image.height
+        console.log(this.height)
         }
     }
 
@@ -114,29 +115,35 @@ const keys= {
         pressed: false
     }
 }
-const testBoundary = new Boundary({
-    position: {
-        x:400,
-        y:400
-    }
-})
 
-const movables = [background, testBoundary]
+
+const movables = [background, ...boundaries]
+
+function rectangularCollision({ rectangle1, rectangle2 }) {
+    return(rectangle1.position.x + rectangle1.width >= rectangle2.position.x && 
+        rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
+        rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&
+        rectangle1.position.y + rectangle1.height >= rectangle2.position.y
+        )
+}
 //creating animate loop
 function animate() {
     window.requestAnimationFrame(animate)
     background.draw()
-   // boundaries.forEach(Boundary => {
-       // Boundary.draw()
-   // })
-   testBoundary.draw()
+    boundaries.forEach((Boundary) => {
+        Boundary.draw()
+
+        if (
+            rectangularCollision({
+                rectangle1: player,
+                rectangle2: Boundary
+            })
+           ){console.log('colinding')}
+
+        
+})
+
    player.draw()
-
-    
-    if (player.position.x + player.width >= testBoundary.position.x && 
-        player.position.x <= testBoundary.position.x + testBoundary.width){
-
-    }
 
     if (keys.w.pressed && lastKey === 'w') {
         movables.forEach((movable) => {
