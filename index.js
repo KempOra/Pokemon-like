@@ -1,7 +1,7 @@
 //creates canvas as constant and gives context (2d or 3d)
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
-console.log(battlezones);
+
 //creates canvas size
 canvas.width = 1024
 canvas.height = 576
@@ -37,7 +37,21 @@ collisionsMap.forEach((row, i) => {
 
     })
 })
+const battleZoneTiles = []
 
+battleMap.forEach((row, i) => {
+    row.forEach((symbol, j) => {
+        if (symbol === 1025)
+        battleZoneTiles.push(
+            new Boundary({
+                position: {
+            x: j * Boundary.width + offset.x,
+            y: i * Boundary.height + offset.y
+        }}))
+
+    })
+})
+console.log(battleZoneTiles)
 //creates containers for map and player
 const image = new Image()
 image.src = './img/gameMap.png'
@@ -100,7 +114,7 @@ const keys= {
 }
 
 
-const movables = [background, ...boundaries, foreground]
+const movables = [background, ...boundaries, foreground, ...battleZoneTiles]
 
 function rectangularCollision({ rectangle1, rectangle2 }) {
     return(rectangle1.position.x + rectangle1.width/2 >= rectangle2.position.x && 
@@ -119,7 +133,10 @@ function animate() {
 
         
 })
-
+battleZoneTiles.forEach((battleZone) => {
+    battleZone.draw()
+    
+})
    player.draw()
 foreground.draw()
 
