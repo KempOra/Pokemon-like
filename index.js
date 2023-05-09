@@ -1,7 +1,7 @@
 //creates canvas as constant and gives context (2d or 3d)
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
-
+console.log(battlezones);
 //creates canvas size
 canvas.width = 1024
 canvas.height = 576
@@ -10,6 +10,10 @@ canvas.height = 576
 const collisionsMap = []
 for (let i = 0; i < collisions.length; i += 70) {// 70 is the length of tiles used in map
 collisionsMap.push(collisions.slice(i, 70 + i))
+}
+const battleMap = []
+for (let i = 0; i < battlezones.length; i += 70) {// 70 is the length of tiles used in map
+battleMap.push(battlezones.slice(i, 70 + i))
 }
 
 const boundaries = []
