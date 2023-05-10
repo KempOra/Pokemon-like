@@ -154,7 +154,7 @@ if(keys.w.pressed || keys.s.pressed || keys.a.pressed || keys.d.pressed){
             rectangle2: battleZone
         }) &&
         overLappingArea > (player.width * player.height) / 2 && Math.random() < 0.01
-       ){console.log('colinding BZ')
+       ){console.log('colliding BZ')
     break
     }
 
