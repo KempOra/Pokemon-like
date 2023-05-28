@@ -7,16 +7,16 @@ canvas.width = 1024
 canvas.height = 576
 
 //building an array scan loop to build collision zone
-const collisionsMap = []
+const collisionsMap = [] //border zone
 for (let i = 0; i < collisions.length; i += 70) {// 70 is the length of tiles used in map
 collisionsMap.push(collisions.slice(i, 70 + i))
 }
-const battleMap = []
+const battleMap = [] //battle zone
 for (let i = 0; i < battlezones.length; i += 70) {// 70 is the length of tiles used in map
 battleMap.push(battlezones.slice(i, 70 + i))
 }
 
-const boundaries = []
+const boundaries = [] //array storing enitre border zone
 
 //offset for total map
 const offset = {
@@ -24,7 +24,7 @@ const offset = {
     y:-130
 }
 //
-//total boundaries creator
+//total border zone creator
 collisionsMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
         if (symbol === 1025)
@@ -37,8 +37,11 @@ collisionsMap.forEach((row, i) => {
 
     })
 })
+
+//array storing entire battle zone
 const battleZoneTiles = []
 
+//total battle zone creator
 battleMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
         if (symbol === 1025)
@@ -52,7 +55,8 @@ battleMap.forEach((row, i) => {
     })
 })
 console.log(battleZoneTiles)
-//creates containers for map and player
+
+//constants for map and player-sprite imgs
 const image = new Image()
 image.src = './img/gameMap.png'
 
@@ -71,36 +75,38 @@ playerRightImg.src = './img/char/playerRight.png'
 const playerUpImg = new Image()
 playerUpImg.src = './img/char/playerUp.png'
 
-
+//creating spawn location for player sprite
 const player = new Sprite({
     position: {
-        x: canvas.width / 2 - 192 / 4 / 2, //render location using full size of sprite sheet
+        x: canvas.width / 2 - 192 / 4 / 2, //cropping sprite sheet to correct size
         y: canvas.height / 2 - 68 / 2
     },
-    image: playerDownImg,
+    image: playerDownImg, // img for starting spritesheet
     frames: {
-        max: 4
+        max: 4 //max frames within sprite sheet
     },
-    sprites: {
+    sprites: { //variations of sprite sheet movement
         up: playerUpImg,
         down: playerDownImg,
         left: playerLeftImg,
         right: playerRightImg,
     }
 })
+//creating spawn location for background map img
 const background = new Sprite({position: {
-    x: offset.x,
+    x: offset.x, //using total map offest
     y: offset.y
     },
     image: image
 })
+//creating spawn location for foreground map img
 const foreground = new Sprite({position: {
-    x: offset.x,
+    x: offset.x, //using total map offset
     y: offset.y
     },
     image: forImg
 })
-//container to tell if key is pressed
+//constant to tell if key is pressed (default is false)
 const keys= {
     w: {
         pressed: false
@@ -113,9 +119,10 @@ const keys= {
     }
 }
 
-
+//constant for all objects that need to move with button presses
 const movables = [background, ...boundaries, foreground, ...battleZoneTiles]
 
+//builds collision ability by comparing rectangle 1 pos with rectangle 2 pos
 function rectangularCollision({ rectangle1, rectangle2 }) {
     return(rectangle1.position.x + rectangle1.width/2 >= rectangle2.position.x && 
         rectangle1.position.x <= rectangle2.position.x + rectangle2.width/2 &&
@@ -123,24 +130,25 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
         rectangle1.position.y + rectangle1.height >= rectangle2.position.y
         )
 }
-//creating animate loop
+//builds animation display in order of furthest back to most foward image
 function animate() {
     window.requestAnimationFrame(animate)
-    background.draw()
+    background.draw() //displays background
     
     boundaries.forEach((Boundary) => {
-        Boundary.draw()
+        Boundary.draw() //displays each boundary square as one whole
 
         
 })
 battleZoneTiles.forEach((battleZone) => {
-    battleZone.draw()
+    battleZone.draw()//displays each battlezone square as one whole
     
 })
-   player.draw()
-foreground.draw()
+   player.draw() //displays player sprite
+foreground.draw() //displays forground img
 
-if(keys.w.pressed || keys.s.pressed || keys.a.pressed || keys.d.pressed){
+//battlezone/player overlap detection while moving only
+if(keys.w.pressed || keys.s.pressed || keys.a.pressed || keys.d.pressed){ 
     for (let i = 0; i < battleZoneTiles.length; i++){
         const battleZone = battleZoneTiles[i]
         const overLappingArea = (Math.min(player.position.x + player.width, battleZone.position.x + battleZone.width) 
@@ -152,39 +160,38 @@ if(keys.w.pressed || keys.s.pressed || keys.a.pressed || keys.d.pressed){
         rectangularCollision({
             rectangle1: player,
             rectangle2: battleZone
-        }) &&
-        overLappingArea > (player.width * player.height) / 2 && Math.random() < 0.01
-       ){console.log('colliding BZ')
+        }) && // randomizes battlezone collision detection output
+        overLappingArea > (player.width * player.height) / 2 && Math.random() < 0.01 
+       ){console.log('colliding BZ') //debug terminal output
     break
     }
 
 
 }
 }
+    //creates .moving and default to true
    let moving = true
+
    player.moving = false
-    if (keys.w.pressed && lastKey === 'w') {
+    if (keys.w.pressed && lastKey === 'w') { //detects keypress and set last key to W
         player.moving = true
-        player.image = player.sprites.up
-        for (let i = 0; i < boundaries.length; i++){
+        player.image = player.sprites.up //changes spritesheet based on key press
+        for (let i = 0; i < boundaries.length; i++){ // searches array for collision tile on location
             const Boundary = boundaries[i]
         if (
-            rectangularCollision({
+            rectangularCollision({ // looks for overlap with collision tile
                 rectangle1: player,
                 rectangle2: {...Boundary, position: {
                 x: Boundary.position.x,
                 y: Boundary.position.y + 3
             }}
             })
-           ){console.log('colinding')
-           moving = false
+           ){console.log('colliding')//debug terminal output
+           moving = false //stops player movement if overlap detected
         break
         }
-
-
     }
-
-        if (moving)
+        if (moving)// moves all movable objects with key press for simuated player movement
         movables.forEach((movable) => {
             movable.position.y += 3
         })
@@ -201,12 +208,10 @@ if(keys.w.pressed || keys.s.pressed || keys.a.pressed || keys.d.pressed){
                 y: Boundary.position.y 
             }}
             })
-           ){console.log('colinding')
+           ){console.log('colliding')
            moving = false
         break
         }
-
-
     }
         if (moving)
         movables.forEach((movable) => {
@@ -226,12 +231,10 @@ if(keys.w.pressed || keys.s.pressed || keys.a.pressed || keys.d.pressed){
                 y: Boundary.position.y - 3
             }}
             })
-           ){console.log('colinding')
+           ){console.log('colliding')
            moving = false
         break
         }
-
-
     }
         if (moving)
         movables.forEach((movable) => {
@@ -251,7 +254,7 @@ if(keys.w.pressed || keys.s.pressed || keys.a.pressed || keys.d.pressed){
                 y: Boundary.position.y 
             }}
             })
-           ){console.log('colinding')
+           ){console.log('colliding')
            moving = false
         break
         }
@@ -265,10 +268,10 @@ if(keys.w.pressed || keys.s.pressed || keys.a.pressed || keys.d.pressed){
     }
     
 }
-animate()
+animate()// runs anime function.
 
 
-let lastKey = ''//lets movent change when multi key press
+let lastKey = ''//lets movement change when multi key press
 window.addEventListener('keydown', (e) =>{//event listener for movement key press down
 switch (e.key){
     case 'w':
