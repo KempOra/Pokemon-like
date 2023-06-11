@@ -130,6 +130,10 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
         rectangle1.position.y + rectangle1.height >= rectangle2.position.y
         )
 }
+const battle = {
+ initiated: false
+}
+
 //builds animation display in order of furthest back to most foward image
 function animate() {
     window.requestAnimationFrame(animate)
@@ -147,7 +151,9 @@ battleZoneTiles.forEach((battleZone) => {
    player.draw() //displays player sprite
 foreground.draw() //displays forground img
 
-//battlezone/player overlap detection while moving only
+if (battleMap.initiated) return
+
+//battlezone/player overlap detection and battle activation
 if(keys.w.pressed || keys.s.pressed || keys.a.pressed || keys.d.pressed){ 
     for (let i = 0; i < battleZoneTiles.length; i++){
         const battleZone = battleZoneTiles[i]
@@ -162,7 +168,8 @@ if(keys.w.pressed || keys.s.pressed || keys.a.pressed || keys.d.pressed){
             rectangle2: battleZone
         }) && // randomizes battlezone collision detection output
         overLappingArea > (player.width * player.height) / 2 && Math.random() < 0.01 
-       ){console.log('colliding BZ') //debug terminal output
+       ){console.log('activate BZ') //debug terminal output
+       battleMap.initiated = false
     break
     }
 
