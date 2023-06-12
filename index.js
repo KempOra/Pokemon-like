@@ -151,7 +151,10 @@ battleZoneTiles.forEach((battleZone) => {
    player.draw() //displays player sprite
 foreground.draw() //displays forground img
 
-if (battleMap.initiated) return
+let moving = true
+player.moving = false
+
+if (battle.initiated) return
 
 //battlezone/player overlap detection and battle activation
 if(keys.w.pressed || keys.s.pressed || keys.a.pressed || keys.d.pressed){ 
@@ -169,17 +172,12 @@ if(keys.w.pressed || keys.s.pressed || keys.a.pressed || keys.d.pressed){
         }) && // randomizes battlezone collision detection output
         overLappingArea > (player.width * player.height) / 2 && Math.random() < 0.01 
        ){console.log('activate BZ') //debug terminal output
-       battleMap.initiated = false
+       battle.initiated = true
     break
+         }
     }
-
-
-}
 }
     //creates .moving and default to true
-   let moving = true
-
-   player.moving = false
     if (keys.w.pressed && lastKey === 'w') { //detects keypress and set last key to W
         player.moving = true
         player.image = player.sprites.up //changes spritesheet based on key press
